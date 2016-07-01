@@ -15,7 +15,7 @@ public class ShopEntity   extends BaseEntity{
     private String  shopaccount;
     //货款
     @Column(name="payment"  )
-    private Float  payment = 0.00f;
+    private Float  payment;
     //佣金
     @Column(name="commission"  )
     private Float  commission;
@@ -34,6 +34,9 @@ public class ShopEntity   extends BaseEntity{
     //合作时间
     @Column(name="hzDate"  )
     private java.util.Date  hzdate;
+    //评价价格
+    @Column(name="pj"  )
+    private Float  pj;
 
     public ShopEntity(){
 
@@ -96,5 +99,11 @@ public class ShopEntity   extends BaseEntity{
     }
     public void setHzdate(java.util.Date hzdate){
         this.hzdate=hzdate;
+    }
+    public Float getPj(){
+        return pj;
+    }
+    public void setPj(Float pj){
+        this.pj=pj;
     }
 }

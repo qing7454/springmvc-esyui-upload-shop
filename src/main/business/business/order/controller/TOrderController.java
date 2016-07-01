@@ -1,6 +1,7 @@
 package business.order.controller;
 
 import business.account.entity.AccountEntity;
+import business.goods.service.GoodsService;
 import business.task.entity.TaskEntity;
 import com.sys.constant.Globals;
 import business.order.entity.TOrderEntity;
@@ -32,8 +33,8 @@ public class TOrderController {
     private TOrderService tOrderService;
     @Resource
     private ISystemService systemService;
-@Resource
-private SysDepService sysDepService;
+    @Resource
+    private GoodsService goodsService;
     /**
     * 转入页面
     * @return
@@ -219,6 +220,12 @@ private SysDepService sysDepService;
         order.setDdnum(orderNum);
         order.setGoodnum(task.getSku());
         order.setPayment(payment);
+        if("PC".equals(task.getSdfs())){
+            order.setCommissionXd(this.goodsService.getCommissionBySKU(task.getSku(),0));    //PC下单佣金
+        }else if("APP".equals(task.getSdfs())){
+            order.setCommissionXd(this.goodsService.getCommissionBySKU(task.getSku(),1));    //APP下单佣金
+        }
+
         order.setXdsj(new Date());
         order.setXdpersonid(sessionUser.getUserId());
         order.setTaskid(taskId);

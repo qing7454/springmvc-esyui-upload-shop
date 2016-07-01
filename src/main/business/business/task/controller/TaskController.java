@@ -1,6 +1,7 @@
 package business.task.controller;
 
 import business.account.entity.AccountEntity;
+import business.goods.service.GoodsService;
 import business.order.entity.TOrderEntity;
 import com.sys.constant.Globals;
 import business.task.entity.TaskEntity;
@@ -34,6 +35,9 @@ public class TaskController {
     private TaskService taskService;
     @Resource
     private ISystemService systemService;
+
+    @Resource
+    private GoodsService goodsService;
 
     /**
      * 转入任务管理页面
@@ -367,16 +371,18 @@ public class TaskController {
                 order.setShpersionid(userId);
                 order.setPjdate(new Date());
                 order.setPjpsersionid(userId);
+                order.setCommissionShPj(this.goodsService.getCommissionBySKU(order.getGoodid(),2));
 
             }else if("03".equals(entity.getTasktype())){    //收货任务
                 order.setDjstate(1);//已收货
                 order.setShdate(new Date());
                 order.setShpersionid(userId);
-
+                order.setCommissionShPj(this.goodsService.getCommissionBySKU(order.getGoodid(), 3));
             }else if("04".equals(entity.getTasktype())){
                 order.setDjstate(2);//已评价
                 order.setPjpsersionid(userId);
                 order.setPjdate(new Date());
+                order.setCommissionShPj(this.goodsService.getCommissionBySKU(order.getGoodid(),4));
             }
             this.taskService.update(order);
         }

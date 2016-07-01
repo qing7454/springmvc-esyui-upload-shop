@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+         http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+	<!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
+    <bean id="mappingJacksonHttpMessageConverter"
+          class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/html;charset=UTF-8</value>
+            </list>
+        </property>
+        <property name="objectMapper" ref="customObjectMapper"></property>
+    </bean>
+    <bean id="multipartResolver"  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- one of the properties available; the maximum file size in bytes -->
+        <property name="maxUploadSize" value="1073741824"/>
+    </bean>
+    <bean id="customObjectMapper" class="com.sys.interceptors.CustomObjectMapper"></bean>
+    <bean   class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="cacheSeconds" value="0" />
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+                <ref bean="mappingJacksonHttpMessageConverter" /><!-- json转换器 -->
+            </list>
+        </property>
+        <property name="webBindingInitializer">
+            <bean class="com.sys.interceptors.MyWebBinding" />
+        </property>
+    </bean>
+    <!--<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="resourceLoaderPath" value="./vepage/"/>
+        <property name="velocityProperties">
+            <props>
+                <prop key="input.encoding">UTF-8</prop>&lt;!&ndash; 指定模板引擎进行模板处理的编码 &ndash;&gt;
+                <prop key="output.encoding">UTF-8</prop>&lt;!&ndash; 指定输出流的编码 &ndash;&gt;
+                <prop key="contentType">text/html;charset=UTF-8</prop>&lt;!&ndash; contentType &ndash;&gt;
+            </props>
+        </property>
+    </bean>
+    <bean id="defaultViewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver" p:order="2">
+        <property name="cache" value="false"/>
+        <property name="prefix" value="/"/>
+        <property name="suffix" value=".vm"/>
+        <property name="contentType"><value>text/html;charset=UTF-8</value></property>
+    </bean>-->
+
+    <!--异常处理 -->
+    <bean id="exceptionHandler"
+          class="com.sys.exception.MyExceptionHandler" />
+
+</beans>

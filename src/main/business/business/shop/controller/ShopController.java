@@ -32,8 +32,7 @@ public class ShopController {
     private ShopService shopService;
     @Resource
     private ISystemService systemService;
-@Resource
-private SysDepService sysDepService;
+
     /**
     * 转入页面
     * @return

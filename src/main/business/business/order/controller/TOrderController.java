@@ -225,7 +225,6 @@ public class TOrderController {
         }else if("APP".equals(task.getSdfs())){
             order.setCommissionXd(this.goodsService.getCommissionBySKU(task.getSku(),1));    //APP下单佣金
         }
-
         order.setXdsj(new Date());
         order.setXdpersonid(sessionUser.getUserId());
         order.setTaskid(taskId);
@@ -234,6 +233,12 @@ public class TOrderController {
             //如果提交成功，任務標記為已完成  0:未分配，1：已分配。2：已完成
             task.setTaskstate(2);
             this.tOrderService.update(task);
+
+            //商家欠货款增加
+            this.goodsService.addShopCommission(task.getSku(),payment,0);
+            //商家欠佣金
+            this.goodsService.addShopCommission(task.getSku(),order.getCommissionXd(),1);
+
             msg.setSuccess(true);
             msg.setMsg("提交成功");
         }else {

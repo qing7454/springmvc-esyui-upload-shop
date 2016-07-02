@@ -1,8 +1,11 @@
 package business.shop.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-import javax.persistence.*;
 import com.code.entity.BaseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "shop")
@@ -32,8 +35,9 @@ public class ShopEntity   extends BaseEntity{
     @Column(name="sh"  )
     private Float  sh;
     //合作时间
-    @Column(name="hzDate"  )
-    private java.util.Date  hzdate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name="cooperateDate"  )
+    private java.util.Date  cooperatedate;
     //评价价格
     @Column(name="pj"  )
     private Float  pj;
@@ -94,11 +98,11 @@ public class ShopEntity   extends BaseEntity{
     public void setSh(Float sh){
         this.sh=sh;
     }
-    public java.util.Date getHzdate(){
-        return hzdate;
+    public java.util.Date getCooperatedate(){
+        return cooperatedate;
     }
-    public void setHzdate(java.util.Date hzdate){
-        this.hzdate=hzdate;
+    public void setCooperatedate(java.util.Date cooperatedate){
+        this.cooperatedate=cooperatedate;
     }
     public Float getPj(){
         return pj;

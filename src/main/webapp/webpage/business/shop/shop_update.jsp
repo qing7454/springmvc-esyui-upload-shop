@@ -38,11 +38,10 @@
             </td>
          </tr>
          <tr>
-
-            <td style="padding: 5px">佣金：</td>
-            <td style="padding: 5px">
-                <input class='easyui-numberbox'  name='commission'  />
-            </td>
+             <td style="padding: 5px">刷单价格PC：</td>
+             <td style="padding: 5px">
+                 <input class='easyui-numberbox'  name='sdPc'  />
+             </td>
 
             <td style="padding: 5px">刷单价格APP：</td>
             <td style="padding: 5px">
@@ -51,10 +50,10 @@
          </tr>
          <tr>
 
-            <td style="padding: 5px">刷单价格PC：</td>
-            <td style="padding: 5px">
-                <input class='easyui-numberbox'  name='sdPc'  />
-            </td>
+             <td style="padding: 5px">收货价格：</td>
+             <td style="padding: 5px">
+                 <input class='easyui-numberbox'  name='sh'  />
+             </td>
 
             <td style="padding: 5px">收货且评价价格：</td>
             <td style="padding: 5px">
@@ -63,15 +62,11 @@
          </tr>
          <tr>
 
-            <td style="padding: 5px">收货价格：</td>
-            <td style="padding: 5px">
-                <input class='easyui-numberbox'  name='sh'  />
-            </td>
-
             <td style="padding: 5px">合作时间：</td>
             <td style="padding: 5px">
-                <input class='easyui-datebox'    name='hzdate'  data-options="formatter:myformatter,parser:myparser" />
+                <input class='easyui-datebox'    name='cooperatedate'  data-options="formatter:myformatter,parser:myparser" />
             </td>
+             <td></td><td></td>
          </tr>
          <tr>
         </tr>

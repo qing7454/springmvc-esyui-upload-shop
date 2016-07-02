@@ -86,7 +86,7 @@
  
                     <td style="padding: 5px">合作时间：</td>
                     <td style="padding: 5px">
-                        <input class='easyui-datebox' disabled='disabled'   name='hzdate'  data-options="formatter:myformatter,parser:myparser" />
+                        <input class='easyui-datebox' disabled='disabled'   name='cooperatedate'  data-options="formatter:myformatter,parser:myparser" />
                     </td>
 
          </tr>

@@ -43,4 +43,30 @@ public class GoodsServiceImpl extends CommonService implements GoodsService {
         }
         return 0;
     }
+
+    /**
+     * 增加商户的货款或者佣金
+     * @param sku   SKU编码
+     * @param money   金额
+     * @param type   类型，0：货款，1：佣金。
+     * @return
+     */
+    @Override
+    public boolean addShopCommission(String sku, float money, int type) {
+        List<Criterion> list = new ArrayList<>();
+        list.add(Restrictions.eq("goodid",sku));
+        List<GoodsEntity> goods = this.getDataList(GoodsEntity.class,list,null);
+        if(goods.size()>0){
+            ShopEntity shop = this.getEntity(ShopEntity.class,goods.get(0).getShopid());
+            if(type == 0){
+                shop.setPayment(shop.getPayment()+money);
+            }else if(type == 1){
+                shop.setCommission(shop.getCommission()+money);
+            }
+            if(this.update(shop)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

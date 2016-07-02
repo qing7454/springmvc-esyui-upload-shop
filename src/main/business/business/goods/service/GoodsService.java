@@ -10,4 +10,14 @@ public interface GoodsService  extends ICommonService {
      * @return
      */
    float getCommissionBySKU(String sku,int type);
+
+
+    /**
+     * 增加商户的货款或者佣金
+     * @param sku   SKU编码
+     * @param money   金额
+     * @param type   类型，0：货款，1：佣金。
+     * @return
+     */
+    boolean addShopCommission(String sku,float money,int type);
 }

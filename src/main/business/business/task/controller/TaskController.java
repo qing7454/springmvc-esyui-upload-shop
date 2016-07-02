@@ -371,20 +371,28 @@ public class TaskController {
                 order.setShpersionid(userId);
                 order.setPjdate(new Date());
                 order.setPjpsersionid(userId);
-                order.setCommissionShPj(this.goodsService.getCommissionBySKU(order.getGoodid(),2));
+                order.setCommissionShPj(this.goodsService.getCommissionBySKU(order.getGoodnum(), 2));
 
             }else if("03".equals(entity.getTasktype())){    //收货任务
                 order.setDjstate(1);//已收货
                 order.setShdate(new Date());
                 order.setShpersionid(userId);
-                order.setCommissionShPj(this.goodsService.getCommissionBySKU(order.getGoodid(), 3));
+                order.setCommissionShPj(this.goodsService.getCommissionBySKU(order.getGoodnum(), 3));
             }else if("04".equals(entity.getTasktype())){
                 order.setDjstate(2);//已评价
                 order.setPjpsersionid(userId);
                 order.setPjdate(new Date());
-                order.setCommissionShPj(this.goodsService.getCommissionBySKU(order.getGoodid(),4));
+                order.setCommissionShPj(this.goodsService.getCommissionBySKU(order.getGoodnum(), 4));
             }
             this.taskService.update(order);
+            if("02".equals(entity.getTasktype())){
+                this.goodsService.addShopCommission(order.getGoodnum(),order.getCommissionShPj(),1);
+            }else if("03".equals(entity.getTasktype())){
+                this.goodsService.addShopCommission(order.getGoodnum(),order.getCommissionSh(),1);
+            }else if("04".equals(entity.getTasktype())){
+                this.goodsService.addShopCommission(order.getGoodnum(),order.getCommissionPj(),1);
+            }
+
         }
         msg.setSuccess(true);
         msg.setMsg("提交成功");

@@ -144,7 +144,7 @@
                     </tr>
                     <tr height="30">
                         <td  width="10%" align="right">商家名：</td><td><input class='easyui-validatebox'   style="width:190px"   name='name_'  /></td>
-                        <td  width="10%" align="right">合作时间：</td><td><input class='easyui-datebox'   style="width:190px" name='hzdate'  data-options="formatter:myformatter,parser:myparser" /></td>
+                        <td  width="10%" align="right">合作时间：</td><td><input class='easyui-datebox'   style="width:190px" name='cooperatedate'  data-options="formatter:myformatter,parser:myparser" /></td>
                     </tr>
                     <tr align="center">
                         <td colspan="6" style="border-bottom:1px solid #d8d8d8;padding:5px 25px 10px 0;height:25px;">

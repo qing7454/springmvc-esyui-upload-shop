@@ -71,6 +71,7 @@
             <td style="padding: 5px">是否晒图：</td>
             <td style="padding: 5px">
                 <select name="sfst" style="width: 175px">
+                    <option value=""></option>
                     <option value="是">是</option>
                     <option value="否">否</option>
                 </select>

@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -55,7 +56,7 @@ public class ShopController {
             d.setOrders("_createDate:desc,_updateDate:desc");
         List<Criterion> list= BeanUtil.generateCriterions(ShopEntity.class, request, false);
 
-        shopService.fillDataGrid(ShopEntity.class,list,d);
+        shopService.fillDataGrid(ShopEntity.class, list, d);
         return d;
     }
     /**
@@ -91,7 +92,7 @@ public class ShopController {
         json.setDataMap(dataMap);
         if(json.isSuccess()) json.setMsg("保存成功!");
         else  json.setMsg("保存失败！");
-        systemService.addLog(ShopEntity.class.getSimpleName()+ json.getMsg(), logType);
+        systemService.addLog(ShopEntity.class.getSimpleName() + json.getMsg(), logType);
         return json;
     }
 
@@ -116,7 +117,7 @@ public class ShopController {
     @RequestMapping(params = "detail")
     public String detail(String id,HttpServletRequest request){
         Assert.notNull(id);
-        request.setAttribute("bean",shopService.getEntity(ShopEntity.class,id));
+        request.setAttribute("bean", shopService.getEntity(ShopEntity.class, id));
         return "business/shop/shop_detail";
     }
     /**
@@ -135,7 +136,7 @@ public class ShopController {
             j.setMsg("删除成功!");
         else
             j.setMsg("删除失败！");
-        systemService.addLog(ShopEntity.class.getSimpleName()+j.getMsg(),Globals.LOG_DEL);
+        systemService.addLog(ShopEntity.class.getSimpleName() + j.getMsg(), Globals.LOG_DEL);
         return j;
     }
 
@@ -161,5 +162,28 @@ public class ShopController {
         }
         return j;
 
+    }
+
+    /**
+     * 根据店铺代码查看店铺是否存在
+     * @param shopCode
+     * @return
+     */
+    @RequestMapping(params = "getCheck")
+    @ResponseBody
+    public SuccessMsg getCheck(String shopCode){
+        SuccessMsg msg = new SuccessMsg();
+
+        List<Criterion> list = new ArrayList<>();
+        list.add(Restrictions.eq("name",shopCode));
+        List<ShopEntity> shops = this.shopService.getDataList(ShopEntity.class,list,null);
+        if(shops.size()>0){
+            msg.setSuccess(true);
+            msg.setMsg("存在");
+        }else {
+            msg.setSuccess(false);
+            msg.setMsg("不存在");
+        }
+        return msg;
     }
 }

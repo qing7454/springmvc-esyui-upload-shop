@@ -18,6 +18,49 @@
             loadFormData(id);
         });
 
+        /**
+         * 加载form数据
+         * @param id
+         */
+        function loadFormData(id){
+            $("#editForm").form("reset");
+            if(jQuery.trim(id).length>0){
+                ajaxJson(actionUrl+"?get",{id:id},function(data){
+                    if(data){
+                        $("#editForm").form("load",data);
+                        if(data.scyq == 1){
+                            $("#zysc").show();
+                        }
+                    }
+                });
+            }
+        }
+
+        function showScyq(){
+            $("#zysc").show();
+        }
+        function hideScyq(){
+            $("#zysc").hide();
+        }
+
+        //保存
+        function saveData(){
+            if(!$("#editForm").form("validate"))
+                return false;
+            ajaxJson(actionUrl+"?save1",$("#editForm").serialize(),function(data){
+
+                if($(".download_button").length<=0){
+                    window.parent.closeDiaWithMsgWhenSuccess("editDia",data);
+                }else{
+                    if(data.success){
+                        $("#editForm").form("load",data.dataMap.bean);
+                        id=data.dataMap.bean.id;
+                    }
+                    slideMsgInfo(data.msg);
+                    $("#editForm").dialog("close");
+                }
+            });
+        }
     </script>
 </head>
 <body >
@@ -59,6 +102,7 @@
             <td style="padding: 5px">
                 <input class='easyui-numberbox'  name='shPj'  />
             </td>
+
          </tr>
          <tr>
 
@@ -66,9 +110,18 @@
             <td style="padding: 5px">
                 <input class='easyui-datebox'    name='cooperatedate'  data-options="formatter:myformatter,parser:myparser" />
             </td>
-             <td></td><td></td>
+
+             <td style="padding: 5px">收菜要求：</td>
+             <td style="padding: 5px">
+                 <label for="task">任务收菜</label><input type="radio" id="task" name="scyq" value="0" checked="checked" onclick="hideScyq()"/>
+                 <label for="free">自由收菜</label><input type="radio" id="free" name="scyq" value="1" onclick="showScyq()"/>
+             </td>
          </tr>
-         <tr>
+         <tr style="display: none" id="zysc">
+             <td>收菜百分比：</td>
+             <td><input class="easyui-numberbox" name="scbfb" data-options="min:0,max:100"> </td>
+             <td>收菜天数</td>
+             <td><input class="easyui-numberbox" name="scts" data-options="min:0"></td>
         </tr>
         <tr align="center">
             <td colspan="4"><a href="javascript:void(0);"  class=" easyui-linkbutton" onclick="saveData()">提交</a></td>

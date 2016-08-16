@@ -263,7 +263,7 @@ public class BeanUtil extends BeanUtils {
                     Object value = PropertyUtils.getSimpleProperty(databean, name);
                     if(value instanceof Number){
                         if(((Number)value).byteValue()==0){
-                            continue;
+//                            continue;
                         }
                     }
                     if (value != null ) {

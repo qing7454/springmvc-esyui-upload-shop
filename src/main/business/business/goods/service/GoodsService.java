@@ -20,4 +20,11 @@ public interface GoodsService  extends ICommonService {
      * @return
      */
     boolean addShopCommission(String sku,float money,int type);
+
+    /**
+     * 获取商家收菜类型
+     * @param sku
+     * @return
+     */
+    Integer getShopSclx(String sku);
 }

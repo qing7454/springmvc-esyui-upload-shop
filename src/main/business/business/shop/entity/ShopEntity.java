@@ -1,11 +1,9 @@
 package business.shop.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.*;
 import com.code.entity.BaseEntity;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "shop")
@@ -41,6 +39,15 @@ public class ShopEntity   extends BaseEntity{
     //评价价格
     @Column(name="pj"  )
     private Float  pj;
+    //收菜要求
+    @Column(name="scyq"  )
+    private Integer  scyq = 0 ;
+    //收菜百分比
+    @Column(name="scbfb"  )
+    private Integer  scbfb = 0 ;
+    //收菜天数
+    @Column(name="scts"  )
+    private Integer  scts = 0 ;
 
     public ShopEntity(){
 
@@ -109,5 +116,23 @@ public class ShopEntity   extends BaseEntity{
     }
     public void setPj(Float pj){
         this.pj=pj;
+    }
+    public Integer getScyq(){
+        return scyq;
+    }
+    public void setScyq(Integer scyq){
+        this.scyq=scyq;
+    }
+    public Integer getScbfb(){
+        return scbfb;
+    }
+    public void setScbfb(Integer scbfb){
+        this.scbfb=scbfb;
+    }
+    public Integer getScts(){
+        return scts;
+    }
+    public void setScts(Integer scts){
+        this.scts=scts;
     }
 }

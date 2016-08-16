@@ -1,12 +1,9 @@
 package business.account.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.*;
 import com.code.entity.BaseEntity;
 import org.springframework.format.annotation.DateTimeFormat;
-
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "account")

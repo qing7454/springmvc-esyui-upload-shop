@@ -360,7 +360,7 @@ public class AccountController {
         Date date = calendar.getTime();
         List<Criterion> list = new ArrayList<>();
         list.add(Restrictions.eq("accountid", accountid));
-        list.add(Restrictions.ge("xdsj", date));
+        list.add(Restrictions.ge("_createDate", date));
         list.add(Restrictions.ge("shopname",shopName));
         List<TOrderEntity> orders = this.accountService.getDataList(TOrderEntity.class,list,null);
         if(orders != null && orders.size()>0){
@@ -384,7 +384,7 @@ public class AccountController {
         List<Criterion> list = new ArrayList<>();
         list.add(Restrictions.eq("accountid", accountid));
         list.add(Restrictions.eq("goodid", goodId));
-        list.add(Restrictions.ge("xdsj", date));
+        list.add(Restrictions.ge("_createDate", date));
         List<TOrderEntity> orders = this.accountService.getDataList(TOrderEntity.class,list,null);
         if(orders != null && orders.size()>0){
             return true;
@@ -406,7 +406,7 @@ public class AccountController {
         Date date = calendar.getTime();
         List<Criterion> list = new ArrayList<>();
         list.add(Restrictions.eq("accountid", accountid));
-        list.add(Restrictions.ge("xdsj", date));
+        list.add(Restrictions.ge("_createDate", date));
         List<TOrderEntity> orders = this.accountService.getDataList(TOrderEntity.class,list,null);
         if(orders != null){
             if(orders.size()>maxNum){
@@ -430,7 +430,7 @@ public class AccountController {
         Date date = calendar.getTime();
         List<Criterion> list = new ArrayList<>();
         list.add(Restrictions.eq("accountid", accountid));
-        list.add(Restrictions.ge("xdsj", date));
+        list.add(Restrictions.ge("_createDate", date));
         List<TOrderEntity> orders = this.accountService.getDataList(TOrderEntity.class,list,null);
         if(orders != null){
             float sum = 0f;

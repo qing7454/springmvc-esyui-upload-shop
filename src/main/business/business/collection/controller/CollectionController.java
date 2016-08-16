@@ -1,8 +1,9 @@
-package business.shop.controller;
+package business.collection.controller;
 
-import com.sys.constant.Globals;
 import business.shop.entity.ShopEntity;
-import business.shop.service.ShopService;
+import com.sys.constant.Globals;
+import business.collection.entity.CollectionEntity;
+import business.collection.service.CollectionService;
 import com.sys.entity.SessionUser;
 import com.sys.service.SysDepService;
 import org.apache.commons.lang.StringUtils;
@@ -27,13 +28,14 @@ import java.util.Map;
 import java.util.HashMap;
 
 @Controller
-@RequestMapping("/business/shop")
-public class ShopController {
+@RequestMapping("/business/collection")
+public class CollectionController {
     @Resource
-    private ShopService shopService;
+    private CollectionService collectionService;
     @Resource
     private ISystemService systemService;
-
+@Resource
+private SysDepService sysDepService;
     /**
     * 转入页面
     * @return
@@ -42,7 +44,7 @@ public class ShopController {
     public String toList(HttpServletRequest request){
         request.setAttribute("_modulesLink",ContextHolderUtil.getRequestUrl());
         request.setAttribute("_conditions", ResourceUtil.getParamsMap(request));
-        return "business/shop/shop_list";
+        return "business/collection/collection_list";
     }
     /**
     * 获取数据列表
@@ -54,9 +56,10 @@ public class ShopController {
     public DataGrid datagrid(DataGrid d,HttpServletRequest request){
         if(StringUtils.isBlank(d.getOrders()))
             d.setOrders("_createDate:desc,_updateDate:desc");
-        List<Criterion> list= BeanUtil.generateCriterions(ShopEntity.class, request, false);
+        List<Criterion> list= BeanUtil.generateCriterions(CollectionEntity.class, request, false);
 
-        shopService.fillDataGrid(ShopEntity.class, list, d);
+
+        collectionService.fillDataGrid(CollectionEntity.class, list, d);
         return d;
     }
     /**
@@ -66,13 +69,13 @@ public class ShopController {
     */
     @RequestMapping(params = "save")
     @ResponseBody
-    public SuccessMsg save(ShopEntity bean){
+    public SuccessMsg save(CollectionEntity bean){
         SuccessMsg json=new SuccessMsg();
         String logType=Globals.LOG_INSERT;
         Map<String,Object> dataMap=new HashMap<>();
         if(StringUtils.isBlank(bean.getId())){
             bean.setId(null);
-            Serializable id=shopService.saveReturnId(bean);
+            Serializable id=collectionService.saveReturnId(bean);
                 json.setSuccess(id!=null);
             try {
                 BeanUtils.setProperty(bean,"id",id);
@@ -82,53 +85,17 @@ public class ShopController {
                 e.printStackTrace();
             }
         }else{
-            ShopEntity shopEntity=shopService.getEntity(ShopEntity.class,bean.getId());
-            if(shopEntity==null) shopEntity=new ShopEntity();
-            BeanUtil.copyNotNull2Bean(bean,shopEntity);
-            json.setSuccess(shopService.update(shopEntity));
+            CollectionEntity collectionEntity=collectionService.getEntity(CollectionEntity.class,bean.getId());
+            if(collectionEntity==null) collectionEntity=new CollectionEntity();
+            BeanUtil.copyNotNull2Bean(bean,collectionEntity);
+            json.setSuccess(collectionService.update(collectionEntity));
             logType=Globals.LOG_UPDATE;
         }
         dataMap.put("bean",bean);
         json.setDataMap(dataMap);
         if(json.isSuccess()) json.setMsg("保存成功!");
         else  json.setMsg("保存失败！");
-        systemService.addLog(ShopEntity.class.getSimpleName() + json.getMsg(), logType);
-        return json;
-    }
-    /**
-     * 保存或更新
-     * @param bean
-     * @return
-     */
-    @RequestMapping(params = "save1")
-    @ResponseBody
-    public SuccessMsg save1(ShopEntity bean){
-        SuccessMsg json=new SuccessMsg();
-        String logType=Globals.LOG_INSERT;
-        Map<String,Object> dataMap=new HashMap<>();
-        if(StringUtils.isBlank(bean.getId())){
-            bean.setId(null);
-            Serializable id=shopService.saveReturnId(bean);
-            json.setSuccess(id!=null);
-            try {
-                BeanUtils.setProperty(bean,"id",id);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        }else{
-            ShopEntity shopEntity=shopService.getEntity(ShopEntity.class,bean.getId());
-            if(shopEntity==null) shopEntity=new ShopEntity();
-            BeanUtil.copyNotNull2Bean(bean,shopEntity);
-            json.setSuccess(shopService.update(shopEntity));
-            logType=Globals.LOG_UPDATE;
-        }
-        dataMap.put("bean",bean);
-        json.setDataMap(dataMap);
-        if(json.isSuccess()) json.setMsg("保存成功!");
-        else  json.setMsg("保存失败！");
-        systemService.addLog(ShopEntity.class.getSimpleName() + json.getMsg(), logType);
+        systemService.addLog(CollectionEntity.class.getSimpleName() + json.getMsg(), logType);
         return json;
     }
 
@@ -139,9 +106,9 @@ public class ShopController {
     */
     @RequestMapping(params = "get")
     @ResponseBody
-    public ShopEntity get(String id){
+    public CollectionEntity get(String id){
         Assert.notNull(id);
-        return  shopService.getEntity(ShopEntity.class,id);
+        return  collectionService.getEntity(CollectionEntity.class,id);
     }
 
     /**
@@ -153,8 +120,8 @@ public class ShopController {
     @RequestMapping(params = "detail")
     public String detail(String id,HttpServletRequest request){
         Assert.notNull(id);
-        request.setAttribute("bean", shopService.getEntity(ShopEntity.class, id));
-        return "business/shop/shop_detail";
+        request.setAttribute("bean", collectionService.getEntity(CollectionEntity.class, id));
+        return "business/collection/collection_detail";
     }
     /**
     * 删除
@@ -165,14 +132,14 @@ public class ShopController {
     @ResponseBody
     public SuccessMsg del(String id){
         SuccessMsg j=new SuccessMsg();
-        ShopEntity d=new ShopEntity();
+        CollectionEntity d=new CollectionEntity();
         d.setId(id);
-        j.setSuccess(shopService.delete(d));
+        j.setSuccess(collectionService.delete(d));
         if(j.isSuccess())
             j.setMsg("删除成功!");
         else
             j.setMsg("删除失败！");
-        systemService.addLog(ShopEntity.class.getSimpleName() + j.getMsg(), Globals.LOG_DEL);
+        systemService.addLog(CollectionEntity.class.getSimpleName() + j.getMsg(), Globals.LOG_DEL);
         return j;
     }
 
@@ -189,11 +156,11 @@ public class ShopController {
             j.setSuccess(true);
             j.setMsg("成功删除"+ids.length+"条记录");
             for(int i=0;i<ids.length;i++){
-                if(!shopService.delete(new ShopEntity(ids[i]))){
+                if(!collectionService.delete(new CollectionEntity(ids[i]))){
                     j.setSuccess(false);
                     j.setMsg("删除失败!");
                 }
-                systemService.addLog(ShopEntity.class.getSimpleName()+j.getMsg(),Globals.LOG_DEL);
+                systemService.addLog(CollectionEntity.class.getSimpleName()+j.getMsg(),Globals.LOG_DEL);
             }
         }
         return j;
@@ -201,25 +168,48 @@ public class ShopController {
     }
 
     /**
-     * 根据店铺代码查看店铺是否存在
-     * @param shopCode
+     * 保存或更新
+     * @param bean
      * @return
      */
-    @RequestMapping(params = "getCheck")
+    @RequestMapping(params = "collection")
     @ResponseBody
-    public SuccessMsg getCheck(String shopCode){
-        SuccessMsg msg = new SuccessMsg();
-
-        List<Criterion> list = new ArrayList<>();
-        list.add(Restrictions.eq("name",shopCode));
-        List<ShopEntity> shops = this.shopService.getDataList(ShopEntity.class,list,null);
-        if(shops.size()>0){
-            msg.setSuccess(true);
-            msg.setMsg("存在");
-        }else {
-            msg.setSuccess(false);
-            msg.setMsg("不存在");
+    public SuccessMsg collection(CollectionEntity bean){
+        SuccessMsg json=new SuccessMsg();
+        String logType=Globals.LOG_INSERT;
+        Map<String,Object> dataMap=new HashMap<>();
+        if(StringUtils.isBlank(bean.getId())){
+            bean.setId(null);
+            Serializable id=collectionService.saveReturnId(bean);
+            //保存成功，减去商户对应的欠款
+            List<Criterion> list = new ArrayList<>();
+            //店铺的name 和收款信息的店铺编号对应
+            list.add(Restrictions.eq("name",bean.getShopnum()));
+            List<ShopEntity> shops = this.collectionService.getDataList(ShopEntity.class,list,null);
+            if(shops.size()>0){
+                ShopEntity shop = shops.get(0);
+                if(bean.getCollectionType().equals("01")){  //货款
+                    shop.setPayment(shop.getPayment()-bean.getCollectionMoney());
+                    this.collectionService.update(shop);
+                }else if(bean.getCollectionType().equals("02")){  //佣金
+                    shop.setCommission(shop.getCommission()-bean.getCollectionMoney());
+                    this.collectionService.update(shop);
+                }
+            }
+            json.setSuccess(id != null);
+            try {
+                BeanUtils.setProperty(bean,"id",id);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
         }
-        return msg;
+        dataMap.put("bean",bean);
+        json.setDataMap(dataMap);
+        if(json.isSuccess()) json.setMsg("保存成功!");
+        else  json.setMsg("保存失败！");
+        systemService.addLog(CollectionEntity.class.getSimpleName()+ json.getMsg(), logType);
+        return json;
     }
 }

@@ -19,6 +19,9 @@ public class SettingEntity   extends BaseEntity{
     //月最多购买金额
     @Column(name="gmje"  )
     private Float  gmje;
+    //收货间隔天数
+    @Column(name="shjgts"  )
+    private Integer  shjgts = 0 ;
 
     public SettingEntity(){
 
@@ -51,5 +54,11 @@ public class SettingEntity   extends BaseEntity{
     }
     public void setGmje(Float gmje){
         this.gmje=gmje;
+    }
+    public Integer getShjgts(){
+        return shjgts;
+    }
+    public void setShjgts(Integer shjgts){
+        this.shjgts=shjgts;
     }
 }

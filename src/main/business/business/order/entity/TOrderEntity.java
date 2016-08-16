@@ -72,7 +72,9 @@ public class TOrderEntity extends BaseEntity{
     //店铺ID
     @Column(name="shopId" ,length = 100  )
     private String  shopid;
-
+    //收菜类型
+    @Column(name="sclx" ,length = 2  )
+    private String  sclx;
     public TOrderEntity(){
 
     }
@@ -206,5 +208,13 @@ public class TOrderEntity extends BaseEntity{
     }
     public void setShopid(String shopid){
         this.shopid=shopid;
+    }
+
+    public String getSclx() {
+        return sclx;
+    }
+
+    public void setSclx(String sclx) {
+        this.sclx = sclx;
     }
 }

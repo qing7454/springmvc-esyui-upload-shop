@@ -2,12 +2,14 @@ package business.order.controller;
 
 import business.account.entity.AccountEntity;
 import business.goods.service.GoodsService;
+import business.setting.entity.SettingEntity;
 import business.task.entity.TaskEntity;
 import com.sys.constant.Globals;
 import business.order.entity.TOrderEntity;
 import business.order.service.TOrderService;
 import com.sys.entity.SessionUser;
 import com.sys.service.SysDepService;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import com.sys.service.ISystemService;
@@ -24,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -45,6 +48,20 @@ public class TOrderController {
         request.setAttribute("_conditions", ResourceUtil.getParamsMap(request));
         return "business/order/t_order_list";
     }
+
+    /**
+     * 转入自由收菜页面
+     * @return
+     */
+    @RequestMapping(params = "toFree")
+    public String toFree(HttpServletRequest request){
+        request.setAttribute("_modulesLink",ContextHolderUtil.getRequestUrl());
+        request.setAttribute("_conditions", ResourceUtil.getParamsMap(request));
+        return "business/order/free_list";
+    }
+
+
+
     /**
     * 获取数据列表
     * @param
@@ -57,9 +74,42 @@ public class TOrderController {
             d.setOrders("_createDate:desc,_updateDate:desc");
         List<Criterion> list= BeanUtil.generateCriterions(TOrderEntity.class, request, false);
 
-        tOrderService.fillDataGrid(TOrderEntity.class,list,d);
+        tOrderService.fillDataGrid(TOrderEntity.class, list, d);
         return d;
     }
+
+    /**
+     * 获取数据列表
+     * @param
+     * @return
+     */
+    @RequestMapping(params = "datagridFree")
+    @ResponseBody
+    public DataGrid datagridFree(DataGrid d,HttpServletRequest request) throws Exception{
+        if(StringUtils.isBlank(d.getOrders()))
+            d.setOrders("_createDate:desc,_updateDate:desc");
+        List<Criterion> list= BeanUtil.generateCriterions(TOrderEntity.class, request, false);
+        HttpSession s=request.getSession();
+        SessionUser sessionUser=(SessionUser)s.getAttribute("login_session_user");
+        list.add(Restrictions.eq("xdpersonid",sessionUser.getUserId()));
+        List<SettingEntity> settings = this.tOrderService.getDataList(SettingEntity.class,new ArrayList<Criterion>(),null);
+        SettingEntity setting = new SettingEntity();
+        if(settings != null && settings.size()>0){
+            setting = settings.get(0);
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DAY_OF_YEAR, -setting.getShjgts());   //获取当前时间减去收菜间隔时间的日期，在这个日期之前下单的订单都可以收菜
+        Date date = calendar.getTime();
+        String dateStr = new SimpleDateFormat("yyyy-MM-dd").format(date);
+        list.add(Restrictions.ge("_createDate", date));
+
+        list.add(Restrictions.eq("sclx", "1"));
+
+        tOrderService.fillDataGrid(TOrderEntity.class, list, d);
+        return d;
+    }
+
     /**
     * 保存或更新
     * @param bean
@@ -207,7 +257,9 @@ public class TOrderController {
         HttpSession s=request.getSession();
         SessionUser sessionUser=(SessionUser)s.getAttribute("login_session_user");
         TOrderEntity order = new TOrderEntity();
+        //任务
         TaskEntity task = this.tOrderService.getEntity(TaskEntity.class,taskId);
+        //账号
         AccountEntity account = this.tOrderService.getEntity(AccountEntity.class,accountId);
         account.setLevel(level);
         account.setIdcard(idcard);
@@ -229,6 +281,8 @@ public class TOrderController {
         order.setXdpersonid(sessionUser.getUserId());
         order.setTaskid(taskId);
         order.setShopname(task.getShopname());
+        //设置收菜类型：0：任务收菜，1：自由收菜
+        order.setSclx(this.goodsService.getShopSclx(task.getSku()).toString());
         if(this.tOrderService.save(order)){       //保存訂單信息
             //如果提交成功，任務標記為已完成  0:未分配，1：已分配。2：已完成
             task.setTaskstate(2);

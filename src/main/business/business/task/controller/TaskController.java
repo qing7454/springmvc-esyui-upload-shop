@@ -3,6 +3,7 @@ package business.task.controller;
 import business.account.entity.AccountEntity;
 import business.goods.service.GoodsService;
 import business.order.entity.TOrderEntity;
+import business.order.service.TOrderService;
 import com.sys.constant.Globals;
 import business.task.entity.TaskEntity;
 import business.task.service.TaskService;
@@ -38,6 +39,10 @@ public class TaskController {
 
     @Resource
     private GoodsService goodsService;
+
+    @Resource
+    private TOrderService tOrderService;
+
 
     /**
      * 转入任务管理页面
@@ -115,7 +120,7 @@ public class TaskController {
     @ResponseBody
     public DataGrid datagrid3(DataGrid d, HttpServletRequest request) {
         if (StringUtils.isBlank(d.getOrders()))
-            d.setOrders("_createDate:desc,_updateDate:desc");
+            d.setOrders("taskstate:asc,_createDate:desc,_updateDate:desc");
         HttpSession s=request.getSession();
         SessionUser sessionUser=(SessionUser)s.getAttribute("login_session_user");
         String userId = sessionUser.getUserId();
@@ -134,14 +139,15 @@ public class TaskController {
     @ResponseBody
     public SuccessMsg taskImport(MultipartFile taskFile){
         SuccessMsg msg = new SuccessMsg();
-        if(!this.taskService.importTask(taskFile)){
-            msg.setSuccess(false);
-            msg.setMsg("导入失败");
-        }else {
+        String result = this.taskService.importTask(taskFile);
+        if(result.equals("成功")){
             msg.setSuccess(true);
             msg.setMsg("导入成功");
-        }
 
+        }else {
+            msg.setSuccess(false);
+            msg.setMsg(result);
+        }
         return msg;
     }
 
@@ -159,6 +165,18 @@ public class TaskController {
         Map<String, Object> dataMap = new HashMap<>();
         if (StringUtils.isBlank(bean.getId())) {
             bean.setId(null);
+            String sku = bean.getSku();
+            if(StringUtils.isNotBlank(sku) && !this.goodsService.checkSKU(sku)){
+                json.setSuccess(false);
+                json.setMsg("SKU不存在");
+                return json;
+            }
+            String order = bean.getOrdernun();
+            if(StringUtils.isNotBlank(order) && !this.tOrderService.checkOrder(order)){
+                json.setSuccess(false);
+                json.setMsg("订单不存在");
+                return json;
+            }
             Serializable id = taskService.saveReturnId(bean);
             json.setSuccess(id != null);
             try {

@@ -91,7 +91,7 @@ public class TOrderController {
         List<Criterion> list= BeanUtil.generateCriterions(TOrderEntity.class, request, false);
         HttpSession s=request.getSession();
         SessionUser sessionUser=(SessionUser)s.getAttribute("login_session_user");
-        list.add(Restrictions.eq("xdpersonid",sessionUser.getUserId()));
+        list.add(Restrictions.eq("xdpersonid",sessionUser.getUserId()));  //下单人员为当前登录用户
         List<SettingEntity> settings = this.tOrderService.getDataList(SettingEntity.class,new ArrayList<Criterion>(),null);
         SettingEntity setting = new SettingEntity();
         if(settings != null && settings.size()>0){
@@ -102,10 +102,10 @@ public class TOrderController {
         calendar.add(Calendar.DAY_OF_YEAR, -setting.getShjgts());   //获取当前时间减去收菜间隔时间的日期，在这个日期之前下单的订单都可以收菜
         Date date = calendar.getTime();
         String dateStr = new SimpleDateFormat("yyyy-MM-dd").format(date);
-        list.add(Restrictions.ge("_createDate", date));
+        list.add(Restrictions.ge("_createDate", date));  //下单时间在收菜间隔时间之前
 
-        list.add(Restrictions.eq("sclx", "1"));
-
+        list.add(Restrictions.eq("sclx", "1"));          //收菜类型为自动收菜
+        list.add(Restrictions.eq("djstate",0));
         tOrderService.fillDataGrid(TOrderEntity.class, list, d);
         return d;
     }
@@ -139,11 +139,11 @@ public class TOrderController {
             json.setSuccess(tOrderService.update(tOrderEntity));
             logType=Globals.LOG_UPDATE;
         }
-        dataMap.put("bean",bean);
+        dataMap.put("bean", bean);
         json.setDataMap(dataMap);
         if(json.isSuccess()) json.setMsg("保存成功!");
         else  json.setMsg("保存失败！");
-        systemService.addLog(TOrderEntity.class.getSimpleName()+ json.getMsg(), logType);
+        systemService.addLog(TOrderEntity.class.getSimpleName() + json.getMsg(), logType);
         return json;
     }
 
@@ -208,7 +208,7 @@ public class TOrderController {
             j.setMsg("删除成功!");
         else
             j.setMsg("删除失败！");
-        systemService.addLog(TOrderEntity.class.getSimpleName()+j.getMsg(),Globals.LOG_DEL);
+        systemService.addLog(TOrderEntity.class.getSimpleName() + j.getMsg(), Globals.LOG_DEL);
         return j;
     }
 
@@ -280,7 +280,8 @@ public class TOrderController {
         order.setXdsj(new Date());
         order.setXdpersonid(sessionUser.getUserId());
         order.setTaskid(taskId);
-        order.setShopname(task.getShopname());
+        String shopName =this.goodsService.getShopNameBySKU(task.getSku());
+        order.setShopname(shopName);
         //设置收菜类型：0：任务收菜，1：自由收菜
         order.setSclx(this.goodsService.getShopSclx(task.getSku()).toString());
         if(this.tOrderService.save(order)){       //保存訂單信息
@@ -298,6 +299,55 @@ public class TOrderController {
         }else {
             msg.setSuccess(false);
             msg.setMsg("提交失败");
+        }
+        return msg;
+    }
+
+    /**
+     * 根据订单ID查找账号信息
+     * @param orderId
+     * @return
+     */
+    @RequestMapping(params = "getAccountInfoByOrderId")
+    @ResponseBody
+    public AccountEntity getAccountInfoByOrderId(String orderId){
+
+        TOrderEntity order = this.tOrderService.getEntity(TOrderEntity.class,orderId);
+        String account = order.getAccount();
+        List<Criterion> list = new ArrayList<>();
+        list.add(Restrictions.eq("account",account));
+        List<AccountEntity> accounts = this.tOrderService.getDataList(AccountEntity.class,list,null);
+        if(accounts != null && accounts.size() > 0){
+            return accounts.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * 完成自由收货任务
+     * @param orderId
+     * @return
+     */
+    @RequestMapping(params = "completeFreeTask")
+    @ResponseBody
+    public SuccessMsg completeFreeTask(String orderId,HttpServletRequest request){
+        SuccessMsg msg = new SuccessMsg();
+        TOrderEntity order = this.tOrderService.getEntity(TOrderEntity.class,orderId);
+        HttpSession s=request.getSession();
+        SessionUser sessionUser=(SessionUser)s.getAttribute("login_session_user");
+        order.setDjstate(2);     //订单状态  0:已下单，1：已收货，2：已评价
+        //收货信息
+        order.setShpersionid(sessionUser.getUserId());
+        order.setShdate(new Date());
+        //评价信息
+        order.setPjpsersionid(sessionUser.getUserId());
+        order.setPjdate(new Date());
+        if(this.tOrderService.update(order)){
+            msg.setSuccess(true);
+            msg.setMsg("收菜成功");
+        }else {
+            msg.setSuccess(false);
+            msg.setMsg("收菜失败");
         }
         return msg;
     }

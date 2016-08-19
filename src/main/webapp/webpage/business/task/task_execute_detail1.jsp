@@ -66,7 +66,6 @@
                 return false;
             }
             var accountId=$("#accountId").val();
-            alert(reason);
             ajaxJson("${pageContext.request.contextPath}/business/account.do?markException",{id:accountId,reason:reason},function(data){
                 if(data.success){
                     window.parent.$("#editDia").dialog("close");
@@ -178,7 +177,7 @@
 
                 <td style="padding: 5px">账号等级：</td>
                 <td style="padding: 5px">
-                    <select id="level" name="level" style="width: 175px" class="easyui-combobox" value="${account.level}">
+                    <select id="level" name="level" style="width: 147px" class="easyui-combobox" data-options="panelHeight:'auto'" value="${account.level}">
                         <option value="注册账号" selected>注册账号</option>
                         <option value="铜牌会员">铜牌会员</option>
                         <option value="银牌会员">银牌会员</option>
@@ -206,7 +205,7 @@
             <tr>
                 <td style="padding: 5px">收货地址：</td>
                 <td style="padding: 5px">
-                    <input class='easyui-validatebox' id="address"  name='address' ${account.address} />
+                    <input class='easyui-validatebox' id="address"  name='address' value="${account.address}"  />
                 </td>
             </tr>
             <tr>
@@ -224,7 +223,7 @@
             </tr>
             <tr>
                 <td>银行卡号；</td><td><input id="bankcard" class="easyui-combobox" name="bankcard"
-                                         data-options="valueField:'cKey',textField:'cValue',url:'${pageContext.request.contextPath}/business/bankcard.do?getBankCard'" />
+                                         data-options="valueField:'cKey',textField:'cValue',url:'${pageContext.request.contextPath}/business/bankcard.do?getBankCard',panelHeight:'auto'" />
             </td>
                 <td>货款金额</td><td><input id="payment" type="text" class="easyui-numberbox" /></td>
             </tr>

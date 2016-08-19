@@ -16,29 +16,29 @@ public class ShopEntity   extends BaseEntity{
     private String  shopaccount;
     //货款
     @Column(name="payment"  )
-    private Float  payment;
+    private Float  payment = 0f;
     //佣金
     @Column(name="commission"  )
-    private Float  commission;
+    private Float  commission = 0f;
     //刷单价格APP
     @Column(name="sd_app"  )
-    private Float  sdApp;
+    private Float  sdApp = 0f;
     //刷单价格PC
     @Column(name="sd_pc"  )
-    private Float  sdPc;
+    private Float  sdPc= 0f;
     //收货且评价价格
     @Column(name="sh_pj"  )
-    private Float  shPj;
+    private Float  shPj= 0f;
     //收货价格
     @Column(name="sh"  )
-    private Float  sh;
+    private Float  sh= 0f;
     //合作时间
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name="cooperateDate"  )
     private java.util.Date  cooperatedate;
     //评价价格
     @Column(name="pj"  )
-    private Float  pj;
+    private Float  pj= 0f;
     //收菜要求
     @Column(name="scyq"  )
     private Integer  scyq = 0 ;

@@ -10,5 +10,5 @@ public interface TaskService  extends ICommonService {
      * @param taskFile
      * @return
      */
-    boolean importTask(MultipartFile taskFile);
+    String importTask(MultipartFile taskFile);
 }

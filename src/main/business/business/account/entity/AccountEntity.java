@@ -48,7 +48,7 @@ public class AccountEntity   extends BaseEntity{
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name="registerDate"  )
     private java.util.Date  registerdate;
-    //账号状态
+    //账号状态 01：正常，02：异常，03：删除
     @Column(name="accountState" ,length = 100  )
     private String  accountstate;
     //手机号

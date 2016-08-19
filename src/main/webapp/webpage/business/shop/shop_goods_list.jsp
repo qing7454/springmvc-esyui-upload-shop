@@ -49,7 +49,7 @@
         }
         //打开新增对话框
         function showAddDia() {
-            $("#editFrame").attr("src", "${pageContext.request.contextPath}/webpage/business/goods/goods_update.jsp?shopid="+shopid);
+            $("#editFrame").attr("src", "${pageContext.request.contextPath}/webpage/business/goods/goods_update.jsp?shopid=" + shopid);
             $("#editDia").dialog("setTitle", "新增数据");
             openEasyuiDialog("editDia");
         }
@@ -125,7 +125,7 @@
         <input style="display: none" id="shopid" name='shopid'/>
         <table width="100%">
             <tr height="20">
-                <td class="head_search" colspan="20" style="text-align:left;height:20px;padding:10px 0 0 0;">
+                <td class="head_search" colspan="20" style="text-align:left;height:20px;padding:0 0 0 0;">
                     &nbsp;&nbsp;&nbsp;&nbsp;<b class="head_font" style="font-size:13px">数据查询</b>
                 </td>
             </tr>
@@ -136,7 +136,7 @@
                 <td><input class='easyui-validatebox' style="width:190px" name='goodname_'/></td>
             </tr>
             <tr align="center">
-                <td colspan="6" style="border-bottom:1px solid #d8d8d8;padding:5px 25px 10px 0;height:25px;">
+                <td colspan="6" style="border-bottom:1px solid #d8d8d8;padding:0 25px 10px 0;height:25px;">
                     <a href="javascript:void(0);" class=" easyui-linkbutton" onclick="getDataList()">查询</a>
                     &nbsp;&nbsp;<a href="javascript:void(0);" class="easyui-linkbutton" onclick="resetForm()">重置</a>
                 </td>
@@ -144,7 +144,7 @@
         </table>
     </form>
 </div>
-<div data-options="region:'center'" style="height:500px;margin:20px 0 0 0;" align="center">
+<div data-options="region:'center'" style="height:500px;margin:0 0 0 0;" align="center">
     <table width="100%">
         <tr height="20">
             <td class="head_search" colspan="20" style="text-align:left;padding:0 0 10px 0;">
@@ -168,7 +168,7 @@
             onResize:function(){
                $(this).dialog('center');
             },onClose:function(){getDataList();$('#editFrame').attr('src','');}">
-    <iframe scrolling="auto" id="editFrame"  frameborder="0"  src="" style="width:99%;height:99%;"></iframe>
+    <iframe scrolling="auto" id="editFrame" frameborder="0" src="" style="width:99%;height:99%;"></iframe>
 </div>
 <%@include file="/include/code/business_footer_ext.jsp" %>
 </body>

@@ -30,7 +30,7 @@ import java.util.Objects;
 @Service("dicService")
 @Transactional
 public class DIcServiceImpl extends CommonService implements DicService {
-    @Ehcache
+//    @Ehcache
     @Override
     public List<ComboBox> getDicComboBoxes(String dicKey, String dicValue, String dicTable) {
         if(StringUtils.isBlank(dicKey))
@@ -74,7 +74,7 @@ public class DIcServiceImpl extends CommonService implements DicService {
         else
             return dicKeyValue;
     }
-    @Ehcache
+//    @Ehcache
     @Override
     public Object getDicCode(String dicKey, String dicValue, String dicTable, String dicKeyValue) {
         if(StringUtils.isBlank(dicKey))
@@ -123,7 +123,7 @@ public class DIcServiceImpl extends CommonService implements DicService {
         }
         return null;
     }
-    @Ehcache
+//    @Ehcache
     @Override
     public List<ComboTree> getDicComboTree(String dicKey, String dicValue, String dicTable) {
         if(StringUtils.isBlank(dicKey)||StringUtils.isBlank(dicValue)||StringUtils.isBlank(dicTable))

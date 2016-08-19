@@ -120,8 +120,8 @@
          <tr style="display: none" id="zysc">
              <td>收菜百分比：</td>
              <td><input class="easyui-numberbox" name="scbfb" data-options="min:0,max:100"> </td>
-             <td>收菜天数</td>
-             <td><input class="easyui-numberbox" name="scts" data-options="min:0"></td>
+             <%--<td>收菜天数</td>--%>
+             <%--<td><input class="easyui-numberbox" name="scts" data-options="min:0"></td>--%>
         </tr>
         <tr align="center">
             <td colspan="4"><a href="javascript:void(0);"  class=" easyui-linkbutton" onclick="saveData()">提交</a></td>

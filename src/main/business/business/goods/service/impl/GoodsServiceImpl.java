@@ -88,4 +88,30 @@ public class GoodsServiceImpl extends CommonService implements GoodsService {
         }
         return null;
     }
+
+    @Override
+    public boolean checkSKU(String sku) {
+        List<Criterion> list = new ArrayList<>();
+        list.add(Restrictions.eq("goodid",sku));
+        List<GoodsEntity> goods = this.getDataList(GoodsEntity.class,list,null);
+        if(goods.size()>0){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String getShopNameBySKU(String sku) {
+        List<Criterion> list = new ArrayList<>();
+        list.add(Restrictions.eq("goodid",sku));
+        List<GoodsEntity> goods = this.getDataList(GoodsEntity.class,list,null);
+        if(goods.size()>0){
+            ShopEntity shop = this.getEntity(ShopEntity.class,goods.get(0).getShopid());
+
+            if(shop != null){
+                return shop.getName();
+            }
+        }
+        return null;
+    }
 }

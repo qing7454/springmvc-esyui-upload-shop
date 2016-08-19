@@ -215,12 +215,12 @@
         </thead>
         <thead>
         <tr>
-            <th field='account' data-options="width:100" sortable="true">账号</th>
-            <th field='passwordLogin' data-options="width:100" sortable="true">登录密码</th>
-            <th field='passwordPay' data-options="width:100" sortable="true">支付密码</th>
-            <th field='phone' data-options="width:100" sortable="true">手机号</th>
-            <th field='email' data-options="width:100" sortable="true">邮箱</th>
-            <th field='passwordEmail' data-options="width:100" sortable="true">邮箱密码</th>
+            <th field='account' data-options="width:200" sortable="true">账号</th>
+            <th field='passwordLogin' data-options="width:150" sortable="true">登录密码</th>
+            <th field='passwordPay' data-options="width:150" sortable="true">支付密码</th>
+            <th field='phone' data-options="width:120" sortable="true">手机号</th>
+            <th field='email' data-options="width:150" sortable="true">邮箱</th>
+            <th field='passwordEmail' data-options="width:120" sortable="true">邮箱密码</th>
             <th field='area' data-options="width:100" sortable="true">地区</th>
             <th field='operator' data-options="width:100" sortable="true">运营商</th>
             <th field='level' data-options="width:100" sortable="true">账号等级</th>

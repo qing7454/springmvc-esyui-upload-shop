@@ -1,6 +1,7 @@
 package business.account.controller;
 
 import business.bankcard.service.BankcardService;
+import business.goods.service.GoodsService;
 import business.order.entity.TOrderEntity;
 import business.setting.entity.SettingEntity;
 import business.task.entity.TaskEntity;
@@ -33,6 +34,9 @@ public class AccountController {
     private ISystemService systemService;
     @Resource
     private BankcardService bankcardService;
+
+    @Resource
+    private GoodsService goodsService;
 
     /**
      * 转入页面正常账号界面
@@ -96,16 +100,21 @@ public class AccountController {
             d.setOrders("_createDate:desc,_updateDate:desc");
         List<Criterion> list = BeanUtil.generateCriterions(AccountEntity.class, request, false);
         List<SettingEntity> settings = this.accountService.getDataList(SettingEntity.class,new ArrayList<Criterion>(),null);
+        //获取任务规则设置信息
         SettingEntity setting = new SettingEntity();
         if(settings != null && settings.size()>0){
             setting = settings.get(0);
         }
+        //获取任务信息
         TaskEntity task = this.accountService.getEntity(TaskEntity.class,taskId);
+        //获取所有符合查询条件的账号信息
         List<AccountEntity> accounts = this.accountService.getDataList(AccountEntity.class,list,null);
         List<AccountEntity> accountList = new ArrayList<>();
+        String shopName = this.goodsService.getShopNameBySKU(task.getSku());
+        //遍历账号信息找到能使用的信息
         for(AccountEntity account :accounts){
 
-            if(isOverTdplq(account.getId(),setting.getTdplq(),task.getShopname())){                 //同店疲劳期
+            if(isOverTdplq(account.getId(),setting.getTdplq(),shopName)){                 //同店疲劳期
                 continue;
             }else if(isOverSukPlq(account.getId(),task.getSku(),setting.getTskuplq())){  //同SKU疲劳期
                 continue;
@@ -361,7 +370,7 @@ public class AccountController {
         List<Criterion> list = new ArrayList<>();
         list.add(Restrictions.eq("accountid", accountid));
         list.add(Restrictions.ge("_createDate", date));
-        list.add(Restrictions.ge("shopname",shopName));
+        list.add(Restrictions.eq("shopname", shopName));
         List<TOrderEntity> orders = this.accountService.getDataList(TOrderEntity.class,list,null);
         if(orders != null && orders.size()>0){
             return true;
@@ -383,7 +392,7 @@ public class AccountController {
         Date date = calendar.getTime();
         List<Criterion> list = new ArrayList<>();
         list.add(Restrictions.eq("accountid", accountid));
-        list.add(Restrictions.eq("goodid", goodId));
+        list.add(Restrictions.eq("goodnum", goodId));
         list.add(Restrictions.ge("_createDate", date));
         List<TOrderEntity> orders = this.accountService.getDataList(TOrderEntity.class,list,null);
         if(orders != null && orders.size()>0){

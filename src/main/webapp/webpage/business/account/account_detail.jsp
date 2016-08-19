@@ -156,7 +156,7 @@
 
                 <td style="padding: 5px">注册日期：</td>
                 <td style="padding: 5px">
-                    <input  name="registerdate" class="easyui-datebox">
+                    <input  name="registerdate" class="easyui-datebox" disabled="disabled">
                 </td>
 
 

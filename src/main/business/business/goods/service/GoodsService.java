@@ -27,4 +27,18 @@ public interface GoodsService  extends ICommonService {
      * @return
      */
     Integer getShopSclx(String sku);
+
+    /**
+     * 检查SKU是否存在
+     * @param sku
+     * @return
+     */
+    boolean checkSKU(String sku);
+
+    /**
+     * 获得该SKU的所有店铺名
+     * @param sku
+     * @return
+     */
+    String getShopNameBySKU(String sku);
 }

@@ -172,6 +172,8 @@
                 </td>
             </tr>
             <tr height="30">
+                <td>账号</td>
+                <td><input style="width: 120px;" class='easyui-validatebox' name='account'></td>
                 <td width="15%" align="right">运营商：</td>
                 <td><select name="operator" style="width:100px">
                         <option value="" selected></option>
@@ -180,33 +182,16 @@
                         <option value="电信联通">电信联通</option>
                     </select>
                 </td>
-                <td width="10%" align="right">账号等级：</td>
-                <td>
-                    <select name="level" style="width: 100px">
-                        <option value="" selected></option>
-                        <option value="注册账号">注册账号</option>
-                        <option value="铜牌会员">铜牌会员</option>
-                        <option value="银牌会员">银牌会员</option>
-                        <option value="金牌会员">金牌会员</option>
-                        <option value="钻石会员">钻石会员</option>
-                    </select>
-                </td>
-                <td width="10%" align="right">邮箱：</td>
-                <td><input class='easyui-validatebox' style="width:100px" name='email'/></td>
-                <td width="10%" align="right">手机：</td>
-                <td><input class='easyui-validatebox' style="width:100px" name='phone'/></td>
-
-            </tr>
-            <tr>
                 <td  width="10%" align="right">地区：</td>
                 <td>
-                    <select style="width: 100px;" id="selProvince" onchange="provinceChange(),setArea();"></select>
+                    <select style="width: 70px;" id="selProvince" onchange="provinceChange(),setArea();"></select>
                 </td>
                 <td>
-                    <select style="width: 100px;" id="selCity" onchange="setArea()"></select>
+                    <select style="width: 70px;" id="selCity" onchange="setArea()"></select>
                     <input name="area" id="area" type="hidden">
                 </td>
             </tr>
+
             <tr align="center">
                 <td colspan="8" style="border-bottom:1px solid #d8d8d8;padding:5px 0px 10px 0;height:25px;">
                     <a href="javascript:void(0);" class=" easyui-linkbutton" onclick="getDataList()">查询</a>

@@ -1,5 +1,7 @@
 package business.task.service.impl;
 
+import business.goods.service.GoodsService;
+import business.order.service.TOrderService;
 import business.task.entity.TaskEntity;
 import business.task.service.TaskService;
 import com.sys.service.impl.CommonService;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,19 +20,25 @@ import java.util.List;
 public class TaskServiceImpl extends CommonService implements TaskService {
 
 
+    @Resource
+    private GoodsService goodsService;
+
+    @Resource
+    private TOrderService tOrderService;
+
     /**
-     * µ¼ÈëÈÎÎñ
+     * å¯¼å…¥ä»»åŠ¡
      * @param taskFile
      * @return
      */
     @Override
-    public boolean importTask(MultipartFile taskFile) {
+    public String importTask(MultipartFile taskFile) {
         try{
             Workbook wb = WorkbookFactory.create(taskFile.getInputStream());
-            Sheet sheet0 = wb.getSheetAt(0);    //Ë¢µ¥ÈÎÎñ
-            Sheet sheet1 = wb.getSheetAt(1);    //ÊÕ»õÇÒÆÀ¼ÛÈÎÎñ
-            Sheet sheet2 = wb.getSheetAt(2);    //ÊÕ»õÈÎÎñ
-            Sheet sheet3 = wb.getSheetAt(3);    //ÆÀ¼ÛÈÎÎñ
+            Sheet sheet0 = wb.getSheetAt(0);    //åˆ·å•ä»»åŠ¡
+            Sheet sheet1 = wb.getSheetAt(1);    //æ”¶è´§ä¸”è¯„ä»·ä»»åŠ¡
+            Sheet sheet2 = wb.getSheetAt(2);    //æ”¶è´§ä»»åŠ¡
+            Sheet sheet3 = wb.getSheetAt(3);    //è¯„ä»·ä»»åŠ¡
             List<TaskEntity> tasks =new ArrayList<>();
             tasks.addAll(getTask0(sheet0));
             tasks.addAll(getTask1(sheet1));
@@ -39,15 +48,15 @@ public class TaskServiceImpl extends CommonService implements TaskService {
                 this.save(task);
             }
         }catch (Exception e){
-            return false;
+            return e.getMessage();
         }
-        return true;
+        return "æˆåŠŸ";
     }
 
-    //Ë¢µ¥ÈÎÎñ
+    //åˆ·å•ä»»åŠ¡
     private List<TaskEntity> getTask0(Sheet sheet) throws Exception{
         List<TaskEntity> tasks = new ArrayList<>();
-        int i=1;    //´ÓµÚ¶şĞĞ¿ªÊ¼¶Á
+        int i=1;    //ä»ç¬¬äºŒè¡Œå¼€å§‹è¯»
         while (true){
             Row row = sheet.getRow(i);
             if(row == null){
@@ -55,6 +64,9 @@ public class TaskServiceImpl extends CommonService implements TaskService {
             }else {
                 //SKU
                 Cell SKUCell = row.getCell(0);
+                if(SKUCell.getCellType() == Cell.CELL_TYPE_BLANK){
+                    break;
+                }
                 String SKU = "";
                 if(SKUCell.getCellType() == Cell.CELL_TYPE_NUMERIC){
                     DecimalFormat df = new DecimalFormat("#");
@@ -62,18 +74,21 @@ public class TaskServiceImpl extends CommonService implements TaskService {
                 }else {
                     SKU = SKUCell.getStringCellValue();
                 }
-                //Ë¢µ¥·½Ê½
+                if(!this.goodsService.checkSKU(SKU)){
+                    throw new Exception("SKU:"+SKU+"ä¸å­˜åœ¨");
+                }
+                //åˆ·å•æ–¹å¼
                 Cell typeCell = row.getCell(1);
                 String type = typeCell.getStringCellValue();
-                //¹Ø¼ü´Ê
+                //å…³é”®è¯
                 Cell keyWorldCell = row.getCell(2);
                 String keyWorld = keyWorldCell.getStringCellValue();
-                //ÈÎÎñÊı
+                //ä»»åŠ¡æ•°
                 Cell countCell = row.getCell(3);
                 DecimalFormat df = new DecimalFormat("#");
                 String countStr = df.format(countCell.getNumericCellValue());
                 int taskCount = Integer.parseInt(countStr);
-                //±¸×¢
+                //å¤‡æ³¨
                 Cell markCell = row.getCell(4);
                 String mark = markCell.getStringCellValue();
                 for(int j = 0;j<taskCount;j++){
@@ -90,17 +105,20 @@ public class TaskServiceImpl extends CommonService implements TaskService {
         }
         return tasks;
     }
-    //ÊÕ»õÇÒÆÀ¼ÛÈÎÎñ
+    //æ”¶è´§ä¸”è¯„ä»·ä»»åŠ¡
     private List<TaskEntity> getTask1(Sheet sheet) throws Exception{
         List<TaskEntity> tasks = new ArrayList<>();
-        int i=1;    //´ÓµÚ¶şĞĞ¿ªÊ¼¶Á
+        int i=1;    //ä»ç¬¬äºŒè¡Œå¼€å§‹è¯»
         while (true){
             Row row = sheet.getRow(i);
             if(row == null){
                 break;
             }else {
-                //¶©µ¥ºÅ
+                //è®¢å•å·
                 Cell orderCell = row.getCell(0);
+                if(orderCell.getCellType() == Cell.CELL_TYPE_BLANK){
+                    break;
+                }
                 String orderNum = "";
                 if(orderCell.getCellType() == Cell.CELL_TYPE_NUMERIC){
                     DecimalFormat df = new DecimalFormat("#");
@@ -108,10 +126,13 @@ public class TaskServiceImpl extends CommonService implements TaskService {
                 }else {
                     orderNum = orderCell.getStringCellValue();
                 }
-                //ÆÀ¼ÛÎÄ×Ö
+                if(!this.tOrderService.checkOrder(orderNum)){
+                    throw new Exception("è®¢å•å·ï¼š"+orderNum+"ä¸å­˜åœ¨");
+                }
+                //è¯„ä»·æ–‡å­—
                 Cell wordCell = row.getCell(1);
                 String word = wordCell.getStringCellValue();
-                //É¹Í¼±àºÅ
+                //æ™’å›¾ç¼–å·
                 Cell pictureCell = row.getCell(2);
                 String picture = "";
                 if(pictureCell.getCellType() == Cell.CELL_TYPE_NUMERIC){
@@ -131,23 +152,29 @@ public class TaskServiceImpl extends CommonService implements TaskService {
         }
         return tasks;
     }
-    //ÊÕ»õÈÎÎñ
+    //æ”¶è´§ä»»åŠ¡
     private List<TaskEntity> getTask2(Sheet sheet) throws Exception{
         List<TaskEntity> tasks = new ArrayList<>();
-        int i=1;    //´ÓµÚ¶şĞĞ¿ªÊ¼¶Á
+        int i=1;    //ä»ç¬¬äºŒè¡Œå¼€å§‹è¯»
         while (true){
             Row row = sheet.getRow(i);
             if(row == null){
                 break;
             }else {
-                //¶©µ¥ºÅ
+                //è®¢å•å·
                 Cell orderCell = row.getCell(0);
+                if(orderCell.getCellType() == Cell.CELL_TYPE_BLANK){
+                    break;
+                }
                 String orderNum = "";
                 if(orderCell.getCellType() == Cell.CELL_TYPE_NUMERIC){
                     DecimalFormat df = new DecimalFormat("#");
                     orderNum = df.format(orderCell.getNumericCellValue());
                 }else {
                     orderNum = orderCell.getStringCellValue();
+                }
+                if(!this.tOrderService.checkOrder(orderNum)){
+                    throw new Exception("è®¢å•å·ï¼š"+orderNum+"ä¸å­˜åœ¨");
                 }
                 TaskEntity task = new TaskEntity();
                 task.setOrdernun(orderNum);
@@ -158,17 +185,20 @@ public class TaskServiceImpl extends CommonService implements TaskService {
         }
         return tasks;
     }
-    //ÆÀ¼ÛÈÎÎñ
+    //è¯„ä»·ä»»åŠ¡
     private List<TaskEntity> getTask3(Sheet sheet) throws Exception{
         List<TaskEntity> tasks = new ArrayList<>();
-        int i=1;    //´ÓµÚ¶şĞĞ¿ªÊ¼¶Á
+        int i=1;    //ä»ç¬¬äºŒè¡Œå¼€å§‹è¯»
         while (true){
             Row row = sheet.getRow(i);
             if(row == null){
                 break;
             }else {
-                //¶©µ¥ºÅ
+                //è®¢å•å·
                 Cell orderCell = row.getCell(0);
+                if(orderCell.getCellType() == Cell.CELL_TYPE_BLANK){
+                    break;
+                }
                 String orderNum = "";
                 if(orderCell.getCellType() == Cell.CELL_TYPE_NUMERIC){
                     DecimalFormat df = new DecimalFormat("#");
@@ -176,10 +206,13 @@ public class TaskServiceImpl extends CommonService implements TaskService {
                 }else {
                     orderNum = orderCell.getStringCellValue();
                 }
-                //ÆÀ¼ÛÎÄ×Ö
+                if(!this.tOrderService.checkOrder(orderNum)){
+                    throw new Exception("è®¢å•å·ï¼š"+orderNum+"ä¸å­˜åœ¨");
+                }
+                //è¯„ä»·æ–‡å­—
                 Cell wordCell = row.getCell(1);
                 String word = wordCell.getStringCellValue();
-                //É¹Í¼±àºÅ
+                //æ™’å›¾ç¼–å·
                 Cell pictureCell = row.getCell(2);
                 String picture = "";
                 if(pictureCell.getCellType() == Cell.CELL_TYPE_NUMERIC){

@@ -15,7 +15,7 @@
          <th field='shpersionid' data-options="width:100,formatter:function(value,row,index){return getUserById(value);}"  sortable="true">收货人员</th>
          <th field='pjpsersionid' data-options="width:100,formatter:function(value,row,index){return getUserById(value);}"  sortable="true">评价人员</th>
          <th field='djstate' data-options="width:100,formatter: function(value,row,index){ return getDicValue('dic_key:dic_type=\'ddzt\'','','',value);}"  sortable="true">订单状态</th>
-         <th field='bankcard' data-options="width:200,formatter:function(value,row,index){return getBankCardById(value);}"  sortable="true">银行卡</th>
+         <%--<th field='bankcard' data-options="width:200,formatter:function(value,row,index){return getBankCardById(value);}"  sortable="true">银行卡</th>--%>
          <th field='payment' sortable="true" data-options="width:100" >货款</th>
          <th field='commissionXd' sortable="true" data-options="width:100" >下单佣金</th>
          <th field='commissionShPj' sortable="true" data-options="width:100" >收货评价佣金</th>

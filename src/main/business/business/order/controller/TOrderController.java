@@ -287,6 +287,7 @@ public class TOrderController {
         if(this.tOrderService.save(order)){       //保存訂單信息
             //如果提交成功，任務標記為已完成  0:未分配，1：已分配。2：已完成
             task.setTaskstate(2);
+            task.setCompletedate(new Date());
             this.tOrderService.update(task);
 
             //商家欠货款增加

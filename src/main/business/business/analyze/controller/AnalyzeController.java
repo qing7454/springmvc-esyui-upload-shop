@@ -64,9 +64,9 @@ public class AnalyzeController {
     @RequestMapping(params = "datagrid")
     @ResponseBody
     public DataGrid datagrid(DataGrid d, HttpServletRequest request) {
-        String assign = (String)request.getParameter("assign");
-        String startTime = (String)request.getParameter("startTime");
-        String endTime = (String)request.getParameter("endTime");
+        String assign = request.getParameter("assign");
+        String startTime = request.getParameter("startTime");
+        String endTime = request.getParameter("endTime");
         //需要查询的人
         List<SysUserEntity> users = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -121,8 +121,9 @@ public class AnalyzeController {
             AnalyzeEntity entity = new AnalyzeEntity();
             List<Criterion> list = new ArrayList<>();
             list.add(Restrictions.eq("ownerid", user.getId()));
-            list.add(Restrictions.ge("completedate", startDate));
-            list.add(Restrictions.le("completedate", endDate));
+//            list.add(Restrictions.ge("completedate", startDate));
+//            list.add(Restrictions.le("completedate", endDate));
+            list.add(Restrictions.between("completedate",startDate,endDate));
             List<TaskEntity> tasks = this.sysUserService.getDataList(TaskEntity.class,list,null);
             entity.setUserId(user.getId());
             entity.setUserName(user.getRealname());

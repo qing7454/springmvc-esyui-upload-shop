@@ -1,9 +1,7 @@
 package com.sys.interceptors;
 
-import com.code.entity.BaseEntity;
 import com.sys.entity.SessionUser;
 import com.sys.entity.SysDepEntity;
-import com.sys.util.ResourceUtil;
 import com.sys.util.WebUtil;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.EmptyInterceptor;

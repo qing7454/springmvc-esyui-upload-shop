@@ -7,12 +7,12 @@
       </thead>
       <thead>
       <tr>
-         <th field='shopName' data-options="width:100"  sortable="true">店铺名称</th>
-         <th field='commissionXd' sortable="true" data-options="width:100" >下单佣金</th>
-         <th field='commissionShPj' sortable="true" data-options="width:100" >收货评价佣金</th>
-         <th field='commissionSh' sortable="true" data-options="width:100" >收货佣金</th>
-         <th field='commissionPj' sortable="true" data-options="width:100" >评价佣金</th>
-         <th field='amount' sortable="true" data-options="width:100" >总计</th>
+         <th field='shopName' data-options="width:200"  sortable="true">店铺名称</th>
+         <th field='commissionXd' sortable="true" data-options="width:150" >下单佣金</th>
+         <th field='commissionShPj' sortable="true" data-options="width:150" >收货评价佣金</th>
+         <th field='commissionSh' sortable="true" data-options="width:150" >收货佣金</th>
+         <th field='commissionPj' sortable="true" data-options="width:150" >评价佣金</th>
+         <th field='amount' sortable="true" data-options="width:150" >总计</th>
         </tr>
       </thead>
   </table>

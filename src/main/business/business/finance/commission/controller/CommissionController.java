@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * CommissionController
@@ -67,15 +66,31 @@ public class CommissionController {
      */
     @RequestMapping(params = "dataGrid1")
     @ResponseBody
-    public DataGrid dataGrid1(String shopName,Date startDate,Date endDate){
+    public DataGrid dataGrid1(HttpServletRequest request,String shopName,String startDate,String endDate) throws Exception{
+        Date date_start = null;
+        Date date_end = null;
+        if(StringUtils.isNotBlank(startDate)){
+            date_start = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
+        }
+        if(StringUtils.isNotBlank(endDate)){
+            date_end = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
+        }
+
+        Float commissionAmount = 0f;
         DataGrid dataGrid = new DataGrid();
         List<String> shopNames = new ArrayList();
         if(StringUtils.isNotBlank(shopName)){
             shopNames.add(shopName);
         }else {
-            shopNames = this.commissionService.getShopsByDate(startDate,endDate);
+            shopNames = this.commissionService.getShopsByDate(date_start,date_end);
         }
-        List<CommissionEntity> entities = this.commissionService.getCommissionStatistics(shopNames,startDate,endDate);
+        List<CommissionEntity> entities = this.commissionService.getCommissionStatistics(shopNames,date_start,date_end);
+        for(CommissionEntity commission :entities){
+            commissionAmount = commissionAmount+ commission.getAmount();
+        }
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("commissionAmount",commissionAmount);
+        dataGrid.setDataMap(dataMap);
         dataGrid.setDataList(entities);
         dataGrid.setTotalCount(entities.size());
         dataGrid.setPagesize(entities.size());

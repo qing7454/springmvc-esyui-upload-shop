@@ -135,6 +135,7 @@
   </component>
   <component name="CopyrightManager" default="" />
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/main/business/business/freeorder/FreeOrderController.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/business/business/shop/entity/ShopEntity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/business/business/task/controller/SupervisionController.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/business/business/task/entity/TaskEntity.java" charset="UTF-8" />

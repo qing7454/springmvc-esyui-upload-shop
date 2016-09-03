@@ -33,7 +33,7 @@ public class TOrderEntity extends BaseEntity{
     //评价人员
     @Column(name="pjPsersionId" ,length = 100  )
     private String  pjpsersionid;
-    //订单状态  0:已下单，1：已收货，2：已评价
+    //订单状态  0:已下单，1：已收货，2：已评价，3：以免单
     @Column(name="djState"  )
     private Integer  djstate = 0 ;
     //银行卡
@@ -44,16 +44,16 @@ public class TOrderEntity extends BaseEntity{
     private Float  payment;
     //下单佣金
     @Column(name="commission_xd"  )
-    private Float  commissionXd;
+    private Float  commissionXd = 0f;
     //收货评价佣金
     @Column(name="commission_sh_pj"  )
-    private Float  commissionShPj;
+    private Float  commissionShPj = 0f;
     //收货佣金
     @Column(name="commission_sh"  )
-    private Float  commissionSh;
+    private Float  commissionSh = 0f;
     //评价佣金
     @Column(name="commission_pj"  )
-    private Float  commissionPj;
+    private Float  commissionPj = 0f;
     //账号ID
     @Column(name="accountId" ,length = 100  )
     private String  accountid;
@@ -72,7 +72,7 @@ public class TOrderEntity extends BaseEntity{
     //店铺ID
     @Column(name="shopId" ,length = 100  )
     private String  shopid;
-    //收菜类型
+    //收菜类型 0,任务收菜，1：自由收菜
     @Column(name="sclx" ,length = 2  )
     private String  sclx;
     public TOrderEntity(){

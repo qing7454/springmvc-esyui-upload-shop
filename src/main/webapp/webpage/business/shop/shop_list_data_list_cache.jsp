@@ -9,8 +9,8 @@
       <tr>
          <th field='name' data-options="width:150"  sortable="true">商家名</th>
          <th field='shopaccount' data-options="width:150"  sortable="true">商家账号</th>
-         <th field='payment' sortable="true" data-options="width:100" >货款</th>
-         <th field='commission' sortable="true" data-options="width:100" >佣金</th>
+         <th field='payment' sortable="true" data-options="width:100" >欠货款</th>
+         <th field='commission' sortable="true" data-options="width:100" >欠佣金</th>
          <th field='sdApp' sortable="true" data-options="width:100" >刷单价格APP</th>
          <th field='sdPc' sortable="true" data-options="width:100" >刷单价格PC</th>
          <th field='shPj' sortable="true" data-options="width:100" >收货且评价价格</th>

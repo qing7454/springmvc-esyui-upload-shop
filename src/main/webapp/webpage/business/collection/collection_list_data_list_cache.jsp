@@ -7,7 +7,7 @@
       </thead>
       <thead>
       <tr>
-         <th field='collectionType' data-options="width:100"  sortable="true">收款类型</th>
+         <th field='collectionType' data-options="width:150,formatter: function(value,row,index){ return getDicValue('dic_key:dic_type=\'sklx\'','','',value);}"  sortable="true">收款类型</th>
          <th field='shopnum' data-options="width:100"  sortable="true">商家</th>
          <th field='collectionDate' sortable="true" data-options="width:100"  >收款日期</th>
          <th field='collectionAccount' data-options="width:100"  sortable="true">收款账户</th>

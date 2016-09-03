@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * CommissionController
- * Created by ³ÌºéÇ¿ on 2016/8/29.
+ * Created by ç¨‹æ´ªå¼º on 2016/8/29.
  */
 @Controller
 @RequestMapping("/business/commission")
@@ -32,7 +32,7 @@ public class CommissionController {
     private TOrderService tOrderService;
 
     /**
-     * ×ªÈëÒ³Ãæ
+     * è½¬å…¥é¡µé¢
      *
      * @return
      */
@@ -44,7 +44,7 @@ public class CommissionController {
     }
 
     /**
-     * »ñÈ¡Êı¾İÁĞ±í
+     * è·å–æ•°æ®åˆ—è¡¨
      *
      * @param
      * @return
@@ -60,7 +60,7 @@ public class CommissionController {
     }
 
     /**
-     * »ñÈ¡Í³¼ÆÁĞ±í
+     * è·å–ç»Ÿè®¡åˆ—è¡¨
      * @param startDate
      * @param endDate
      * @return
